@@ -1,0 +1,38 @@
+|-- .env.local
+|-- .gitignore
+|-- eslint.config.mjs
+|-- next-env.d.ts
+|-- next.config.ts
+|-- package-lock.json
+|-- package.json
+|-- postcss.config.mjs
+|-- README.md
+|-- tsconfig.json
+|-- app
+    |-- globals.css
+    |-- layout.tsx
+    |-- page.tsx
+    |-- api
+        |-- auth
+            |-- nextauth
+            |-- [...nextauth]
+                |-- route.ts
+    |-- components
+        |-- AIAssistant.tsx
+        |-- AIService.ts
+        |-- AppContent.tsx
+        |-- AuthService.ts
+        |-- Challenge.tsx
+        |-- ChallengesList.tsx
+        |-- CodeEditor.tsx
+        |-- Dashboard.tsx
+        |-- Feedback.tsx
+        |-- Login.tsx
+        |-- Preview.tsx
+        |-- Register.tsx
+        |-- SessionWrapper.tsx
+        |-- UserProfile.tsx
+        |-- VersionHistory.tsx
+        |-- Workspace.tsx
+    |-- types
+        |-- next-auth.d.ts

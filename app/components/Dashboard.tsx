@@ -2,14 +2,27 @@
 
 import React from 'react';
 import { Layout, Zap, Bell, HelpCircle, Trophy, Award, User as UserIcon, Bot, Code2, MessageSquare } from 'lucide-react';
-
-interface DashboardProps {
-  user: any;
-  onLogout: () => void;
-  onStartChallenge: (challenge: any) => void;
+interface Challenge {
+  id: string;
+  title: string;
+  difficulty: string;
+  points: number;
+}
+interface User {
+  name: string;
+  level: number;
+  points: number;
+  completedChallenges: number;
+  rank: number;
 }
 
-const Dashboard = ({ user, onLogout, onStartChallenge }: DashboardProps) => {
+interface DashboardProps {
+  user: User;
+  onLogout: () => void;
+  onStartChallenge: (challenge: Challenge) => void; // Replace 'any' with 'Challenge'
+}
+
+const Dashboard = ({ user, onStartChallenge }: DashboardProps) => {
   const featuredChallenges = [
     { id: '1', title: 'Button Component', difficulty: 'Beginner', points: 100 },
     { id: '2', title: 'Card Layout', difficulty: 'Intermediate', points: 200 },
@@ -117,7 +130,7 @@ const Dashboard = ({ user, onLogout, onStartChallenge }: DashboardProps) => {
             <h2 className="text-xl font-bold text-white mb-4">Recent Activity</h2>
             <div className="bg-gray-800 rounded-lg p-4 space-y-4">
               <div className="border-l-4 border-blue-500 pl-4 py-1">
-                <div className="text-white font-medium">Completed "Button Component" Challenge</div>
+                <div className="text-white font-medium">Completed {"Button Component"} Challenge</div>
                 <div className="text-gray-400 text-sm">2 days ago • Earned 100 points</div>
               </div>
               <div className="border-l-4 border-green-500 pl-4 py-1">
@@ -125,7 +138,7 @@ const Dashboard = ({ user, onLogout, onStartChallenge }: DashboardProps) => {
                 <div className="text-gray-400 text-sm">5 days ago • Unlocked new challenges</div>
               </div>
               <div className="border-l-4 border-purple-500 pl-4 py-1">
-                <div className="text-white font-medium">Started "Card Layout" Challenge</div>
+                <div className="text-white font-medium">Started {"Card Layout" }Challenge</div>
                 <div className="text-gray-400 text-sm">1 week ago • In progress</div>
               </div>
             </div>

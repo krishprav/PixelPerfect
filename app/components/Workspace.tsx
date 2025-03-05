@@ -3,27 +3,58 @@
 import React, { useState } from 'react';
 import { Layout, BrainCircuit, Save, GitBranch, RotateCcw, ArrowRight } from 'lucide-react';
 import { AIService } from './AIService';
-import AIAssistant from './AIAssistant';
+import Challenge from './Challenge'; // Import missing components
+import Feedback from './Feedback';
 import CodeEditor from './CodeEditor';
 import Preview from './Preview';
+import AIAssistant from './AIAssistant';
 import VersionHistory from './VersionHistory';
-import Challenge from './Challenge';
-import Feedback from './Feedback';
 import UserProfile from './UserProfile';
 
+// Define the User type
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  avatarUrl: string | null;
+  token: string;
+  level: number;
+  points: number;
+  completedChallenges: number;
+  rank: number;
+}
+
 interface WorkspaceProps {
-  user: any;
+  user: User; // Replace 'any' with 'User'
   onLogout: () => void;
 }
 
-const Workspace = ({ user, onLogout }: WorkspaceProps) => {
-  const [code, setCode] = useState('<!-- Your code here -->\n<div class="component">\n  <h1>Hello PixelPerfect!</h1>\n</div>\n\n<style>\n.component {\n  padding: 20px;\n  background: #f0f0f0;\n  border-radius: 8px;\n  font-family: system-ui, sans-serif;\n}\n\nh1 {\n  color: #333;\n  font-size: 24px;\n}\n</style>');
+const Workspace = ({ user }: WorkspaceProps) => {
+  const [code, setCode] = useState(`<!-- Your code here -->
+<div class="component">
+  <h1>Hello PixelPerfect!</h1>
+</div>
+
+<style>
+.component {
+  padding: 20px;
+  background: #f0f0f0;
+  border-radius: 8px;
+  font-family: system-ui, sans-serif;
+}
+
+h1 {
+  color: #333;
+  font-size: 24px;
+}
+</style>`);
   const [showAIAssistant, setShowAIAssistant] = useState(false);
   const [showVersionHistory, setShowVersionHistory] = useState(false);
   const [showUserProfile, setShowUserProfile] = useState(false);
-  const [versions, setVersions] = useState<any[]>([]);
-  const [feedback, setFeedback] = useState<any[]>([]);
-  const [currentChallenge] = useState({
+  const [versions, setVersions] = useState<{ code: string; timestamp: string }[]>([]);
+  const [feedback, setFeedback] = useState<{ type: string; message: string; aiSuggestion?: string }[]>([]);
+
+  const currentChallenge = {
     id: '1',
     title: 'Button Component',
     description: 'Create a versatile button component with primary and secondary variants, proper hover states, and accessibility features.',
@@ -38,7 +69,7 @@ const Workspace = ({ user, onLogout }: WorkspaceProps) => {
     ],
     referenceImage: '/api/placeholder/480/160',
     tags: ['HTML', 'CSS', 'Components', 'Accessibility'],
-  });
+  };
 
   const handleSaveVersion = () => {
     const now = new Date();
@@ -61,7 +92,7 @@ const Workspace = ({ user, onLogout }: WorkspaceProps) => {
       const feedback = await AIService.analyzeFeedback(code, currentChallenge.requirements);
       setFeedback(feedback);
     } catch (error) {
-      console.error("Error analyzing code:", error);
+      console.error('Error analyzing code:', error);
     }
   };
 
@@ -72,7 +103,7 @@ const Workspace = ({ user, onLogout }: WorkspaceProps) => {
       const updatedFeedback = await AIService.analyzeFeedback(fixedCode, currentChallenge.requirements);
       setFeedback(updatedFeedback);
     } catch (error) {
-      console.error("Error fixing code:", error);
+      console.error('Error fixing code:', error);
     }
   };
 
@@ -85,12 +116,20 @@ const Workspace = ({ user, onLogout }: WorkspaceProps) => {
             <h1 className="text-xl font-bold text-white">PixelPerfect</h1>
           </div>
           <div className="flex items-center space-x-3">
-            <button className="bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded-md text-sm flex items-center" onClick={() => setShowAIAssistant(true)}>
+            <button
+              className="bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded-md text-sm flex items-center"
+              onClick={() => setShowAIAssistant(true)}
+            >
               <BrainCircuit className="w-4 h-4 mr-1 text-purple-400" /> AI Assistant
             </button>
-            <button className="bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded-md text-sm" onClick={handleSubmit}>Submit</button>
+            <button className="bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded-md text-sm" onClick={handleSubmit}>
+              Submit
+            </button>
             <div className="relative">
-              <button className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white" onClick={() => setShowUserProfile(!showUserProfile)}>
+              <button
+                className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white"
+                onClick={() => setShowUserProfile(!showUserProfile)}
+              >
                 {user.name.charAt(0)}
               </button>
             </div>
@@ -109,18 +148,49 @@ const Workspace = ({ user, onLogout }: WorkspaceProps) => {
         <div className="flex-1 flex flex-col">
           <div className="bg-gray-800 border-b border-gray-700 p-2 flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <button className="bg-gray-700 hover:bg-gray-600 text-white px-2 py-1 rounded text-xs flex items-center" onClick={handleSaveVersion}>
+              <button
+                className="bg-gray-700 hover:bg-gray-600 text-white px-2 py-1 rounded text-xs flex items-center"
+                onClick={handleSaveVersion}
+              >
                 <Save className="w-3 h-3 mr-1" /> Save Version
               </button>
-              <button className="bg-gray-700 hover:bg-gray-600 text-white px-2 py-1 rounded text-xs flex items-center" onClick={() => setShowVersionHistory(true)}>
+              <button
+                className="bg-gray-700 hover:bg-gray-600 text-white px-2 py-1 rounded text-xs flex items-center"
+                onClick={() => setShowVersionHistory(true)}
+              >
                 <GitBranch className="w-3 h-3 mr-1" /> History
               </button>
-              <button className="bg-gray-700 hover:bg-gray-600 text-white px-2 py-1 rounded text-xs flex items-center" onClick={() => setCode('<!-- Your code here -->\n<div class="component">\n  <h1>Hello PixelPerfect!</h1>\n</div>\n\n<style>\n.component {\n  padding: 20px;\n  background: #f0f0f0;\n  border-radius: 8px;\n  font-family: system-ui, sans-serif;\n}\n\nh1 {\n  color: #333;\n  font-size: 24px;\n}\n</style>')}>
+              <button
+                className="bg-gray-700 hover:bg-gray-600 text-white px-2 py-1 rounded text-xs flex items-center"
+                onClick={() =>
+                  setCode(`<!-- Your code here -->
+<div class="component">
+  <h1>Hello PixelPerfect!</h1>
+</div>
+
+<style>
+.component {
+  padding: 20px;
+  background: #f0f0f0;
+  border-radius: 8px;
+  font-family: system-ui, sans-serif;
+}
+
+h1 {
+  color: #333;
+  font-size: 24px;
+}
+</style>`)
+                }
+              >
                 <RotateCcw className="w-3 h-3 mr-1" /> Reset
               </button>
             </div>
             <div>
-              <button className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm flex items-center" onClick={handleSubmit}>
+              <button
+                className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm flex items-center"
+                onClick={handleSubmit}
+              >
                 <ArrowRight className="w-4 h-4 mr-1" /> Submit Solution
               </button>
             </div>
@@ -132,14 +202,17 @@ const Workspace = ({ user, onLogout }: WorkspaceProps) => {
         </div>
       </div>
       {showAIAssistant && (
-        <AIAssistant challenge={currentChallenge} onCodeGenerate={handleGenerateCode} onCodeFix={handleFixCode} onClose={() => setShowAIAssistant(false)} />
+        <AIAssistant
+          challenge={currentChallenge}
+          onCodeGenerate={handleGenerateCode}
+          onCodeFix={handleFixCode}
+          onClose={() => setShowAIAssistant(false)}
+        />
       )}
       {showVersionHistory && (
         <VersionHistory versions={versions} onApply={handleApplyVersion} onClose={() => setShowVersionHistory(false)} />
       )}
-      {showUserProfile && (
-        <UserProfile user={user} onClose={() => setShowUserProfile(false)} />
-      )}
+      {showUserProfile && <UserProfile user={user} onClose={() => setShowUserProfile(false)} />}
     </div>
   );
 };

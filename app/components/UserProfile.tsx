@@ -3,8 +3,18 @@
 import React from 'react';
 import { User, Trophy, Heart, Award } from 'lucide-react';
 
+// Define the User type
+interface User {
+  name: string;
+  email: string;
+  level: number;
+  points: number;
+  completedChallenges: number;
+  rank: number;
+}
+
 interface UserProfileProps {
-  user: any;
+  user: User; // Replace 'any' with 'User'
   onClose: () => void;
 }
 
@@ -16,7 +26,9 @@ const UserProfile = ({ user, onClose }: UserProfileProps) => {
           <User className="w-5 h-5 text-blue-400 mr-2" />
           <h3 className="text-white font-medium">Your Profile</h3>
         </div>
-        <button className="text-gray-400 hover:text-gray-200" onClick={onClose}>×</button>
+        <button className="text-gray-400 hover:text-gray-200" onClick={onClose}>
+          ×
+        </button>
       </div>
       <div className="p-4">
         <div className="flex items-center mb-4">

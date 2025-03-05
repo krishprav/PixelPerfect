@@ -4,8 +4,20 @@ import React, { useState } from 'react';
 import { Layout } from 'lucide-react';
 import { AuthService } from './AuthService';
 
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  avatarUrl: string | null;
+  token: string;
+  level: number;
+  points: number;
+  completedChallenges: number;
+  rank: number;
+}
+
 interface LoginProps {
-  onLogin: (user: any) => void;
+  onLogin: (user: User) => void; 
   switchToRegister: () => void;
   onGoogleLogin: () => void;
 }
@@ -24,7 +36,8 @@ const Login = ({ onLogin, switchToRegister, onGoogleLogin }: LoginProps) => {
       const user = await AuthService.login(email, password);
       AuthService.setCurrentUser(user);
       onLogin(user);
-    } catch (err) {
+    } catch (error) {
+      console.error('Login failed:', error);
       setError('Invalid email or password');
     } finally {
       setLoading(false);
@@ -44,7 +57,9 @@ const Login = ({ onLogin, switchToRegister, onGoogleLogin }: LoginProps) => {
         )}
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block text-gray-400 text-sm mb-2" htmlFor="email">Email</label>
+            <label className="block text-gray-400 text-sm mb-2" htmlFor="email">
+              Email
+            </label>
             <input
               id="email"
               type="email"
@@ -55,7 +70,9 @@ const Login = ({ onLogin, switchToRegister, onGoogleLogin }: LoginProps) => {
             />
           </div>
           <div className="mb-6">
-            <label className="block text-gray-400 text-sm mb-2" htmlFor="password">Password</label>
+            <label className="block text-gray-400 text-sm mb-2" htmlFor="password">
+              Password
+            </label>
             <input
               id="password"
               type="password"
@@ -67,7 +84,9 @@ const Login = ({ onLogin, switchToRegister, onGoogleLogin }: LoginProps) => {
           </div>
           <button
             type="submit"
-            className={`w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md transition flex items-center justify-center ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
+            className={`w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md transition flex items-center justify-center ${
+              loading ? 'opacity-70 cursor-not-allowed' : ''
+            }`}
             disabled={loading}
           >
             {loading ? 'Logging in...' : 'Log In'}

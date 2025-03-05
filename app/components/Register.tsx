@@ -4,8 +4,22 @@ import React, { useState } from 'react';
 import { Layout } from 'lucide-react';
 import { AuthService } from './AuthService';
 
+// Define the User type
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  avatarUrl: string | null;
+  token: string;
+  level: number;
+  points: number;
+  completedChallenges: number;
+  rank: number;
+}
+
+// Update RegisterProps to use the User type instead of 'any'
 interface RegisterProps {
-  onRegister: (user: any) => void;
+  onRegister: (user: User) => void; // Replace 'any' with 'User'
   switchToLogin: () => void;
 }
 
@@ -26,10 +40,13 @@ const Register = ({ onRegister, switchToLogin }: RegisterProps) => {
     setLoading(true);
     setError('');
     try {
+      // AuthService.register returns a User object
       const user = await AuthService.register(email, password, name);
       AuthService.setCurrentUser(user);
       onRegister(user);
-    } catch (err) {
+    } catch (error) {
+      // Use the error object to log details if needed
+      console.error('Registration failed:', error);
       setError('Registration failed. Please try again.');
     } finally {
       setLoading(false);
@@ -49,7 +66,9 @@ const Register = ({ onRegister, switchToLogin }: RegisterProps) => {
         )}
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block text-gray-400 text-sm mb-2" htmlFor="name">Full Name</label>
+            <label className="block text-gray-400 text-sm mb-2" htmlFor="name">
+              Full Name
+            </label>
             <input
               id="name"
               type="text"
@@ -60,7 +79,9 @@ const Register = ({ onRegister, switchToLogin }: RegisterProps) => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-400 text-sm mb-2" htmlFor="email">Email</label>
+            <label className="block text-gray-400 text-sm mb-2" htmlFor="email">
+              Email
+            </label>
             <input
               id="email"
               type="email"
@@ -71,7 +92,9 @@ const Register = ({ onRegister, switchToLogin }: RegisterProps) => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-400 text-sm mb-2" htmlFor="password">Password</label>
+            <label className="block text-gray-400 text-sm mb-2" htmlFor="password">
+              Password
+            </label>
             <input
               id="password"
               type="password"
@@ -82,7 +105,9 @@ const Register = ({ onRegister, switchToLogin }: RegisterProps) => {
             />
           </div>
           <div className="mb-6">
-            <label className="block text-gray-400 text-sm mb-2" htmlFor="confirmPassword">Confirm Password</label>
+            <label className="block text-gray-400 text-sm mb-2" htmlFor="confirmPassword">
+              Confirm Password
+            </label>
             <input
               id="confirmPassword"
               type="password"
@@ -94,7 +119,9 @@ const Register = ({ onRegister, switchToLogin }: RegisterProps) => {
           </div>
           <button
             type="submit"
-            className={`w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md transition flex items-center justify-center ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
+            className={`w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md transition flex items-center justify-center ${
+              loading ? 'opacity-70 cursor-not-allowed' : ''
+            }`}
             disabled={loading}
           >
             {loading ? 'Creating account...' : 'Register'}

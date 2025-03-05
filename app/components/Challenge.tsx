@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 
 interface ChallengeProps {
   challenge: {
@@ -26,13 +27,19 @@ const Challenge = ({ challenge }: ChallengeProps) => {
         </ul>
       </div>
       {challenge.referenceImage && (
-        <div className="mb-4">
-          <h4 className="text-sm font-medium text-gray-300 mb-2">Reference Design:</h4>
-          <div className="bg-gray-750 p-2 rounded">
-            <img src={challenge.referenceImage} alt="Reference design" className="w-full rounded" />
-          </div>
-        </div>
-      )}
+  <div className="mb-4">
+    <h4 className="text-sm font-medium text-gray-300 mb-2">Reference Design:</h4>
+    <div className="bg-gray-750 p-2 rounded">
+      <Image
+        src={challenge.referenceImage}
+        alt="Reference design"
+        width={800} // Replace with actual width
+        height={600} // Replace with actual height
+        className="w-full rounded"
+      />
+    </div>
+  </div>
+)}
       <div className="flex flex-wrap gap-2 mt-3">
         {challenge.tags.map((tag, index) => (
           <span key={index} className="bg-gray-700 text-blue-300 text-xs px-2 py-1 rounded">{tag}</span>
